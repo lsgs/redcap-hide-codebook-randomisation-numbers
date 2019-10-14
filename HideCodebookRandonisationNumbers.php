@@ -12,12 +12,19 @@ use Randomization;
 
 class HideCodebookRandonisationNumbers extends AbstractExternalModule
 {
-        const OPTION_THRESHOLD = 10;
+        const DEFAULT_THRESHOLD = 10;
+        const DEFAULT_MESSAGE = "Randomization numbers hidden";
+        
+        public function redcap_module_system_enable($version) {
+                $this->setSystemSetting('system-threshold', ''.self::DEFAULT_THRESHOLD);
+                $this->setSystemSetting('system-message', self::DEFAULT_MESSAGE);
+        }
+        
         public function redcap_every_page_top($project_id) {
                 if (isset($project_id) && intval($project_id)>0 && PAGE==='Design/data_dictionary_codebook.php') {
 
                         // hide long randomisation list info in codebook because is very long and
-                        // may even show group allocation sequence (when not blinded)
+                        // may even show group allocatiion sequence (when not blinded)
                         global $Proj, $randomization;
 
                         if ($randomization) {
@@ -25,7 +32,11 @@ class HideCodebookRandonisationNumbers extends AbstractExternalModule
                                 if ($randomizationAttributes !== false) {
                                         $targetField = $randomizationAttributes['targetField'];
                                         $randlistOptions = parseEnum($Proj->metadata[$targetField]['element_enum']);
-                                        if (count($randlistOptions) > self::OPTION_THRESHOLD) {
+                                        
+                                        $threshold = $this->getThreshold();
+                                        $message = $this->getMessage();
+                                            
+                                        if (count($randlistOptions) > intval($threshold)) {
                                                 ?>
                                                 <script type='text/javascript'>
                                                     (function(document, $) {
@@ -38,7 +49,7 @@ class HideCodebookRandonisationNumbers extends AbstractExternalModule
                                                             randVarTd
                                                                 .parent('tr')
                                                                 .find('table.ReportTableWithBorder')
-                                                                .replaceWith('<div style="margin-top:5px;"><mark>Randomisation numbers hidden</mark></div>'); 
+                                                                .replaceWith('<div style="margin-top:5px;"><mark><?php echo $message;?></mark></div>'); 
                                                         });
                                                     })(document, jQuery);
                                                 </script>
@@ -47,5 +58,26 @@ class HideCodebookRandonisationNumbers extends AbstractExternalModule
                                 }
                         }
                 }
+        }
+        
+        protected function getThreshold() {
+                return $this->getSetting('threshold');
+        }
+        
+        protected function getMessage() {
+                return $this->getSetting('message');
+        }
+        
+        protected function getSetting($setting) {
+                $s = $this->getProjectSetting("project-$setting");
+                if (is_null($s) || empty($s)) {
+                        $s = $this->getSystemSetting("system-$setting");
+                }
+                if (is_null($s) || empty($s)) {
+                        $s = '';
+                        if ($setting==='threshold') { $s = self::DEFAULT_THRESHOLD; }
+                        if ($setting==='message') { $s = self::DEFAULT_MESSAGE; }
+                }
+                return \REDCap::escapeHtml($s);
         }
 }

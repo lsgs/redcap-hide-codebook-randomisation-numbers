@@ -1,27 +1,52 @@
 {
-	"name": "Hide Codebook Randomisation Numbers",
+    "name": "Hide Codebook Randomisation Numbers",
 
-	"description": "Hides randomisation allocation groups on Codebook page. This can be useful when the randomisation allocation field is set up with numbers rather than groups.",
+    "description": "Hides randomisation allocation groups on Codebook page. This can be useful when the randomisation allocation field is set up with numbers rather than groups.",
 
-	"namespace": "MCRI\\HideCodebookRandonisationNumbers",
+    "namespace": "MCRI\\HideCodebookRandonisationNumbers",
 
-	"authors": [
-		{
-			"name": "Luke Stevens",
-			"email": "luke.stevens@mcri.edu.au",
-			"institution": "Murdoch Children's Research Institute"
-		}
-	],
+    "authors": [
+        {
+            "name": "Luke Stevens",
+            "email": "luke.stevens@mcri.edu.au",
+            "institution": "Murdoch Children's Research Institute"
+        }
+    ],
 
-	"permissions": [
+    "permissions": [
+        "redcap_module_system_enable",
         "redcap_every_page_top"
-	],
+    ],
 
     "enable-every-page-hooks-on-system-pages": false,
 
-	"system-settings": [
-	],
+    "system-settings": [
+        {
+            "key": "system-threshold",
+            "name": "Threshold choice count (number of choices)",
+            "required": false,
+            "type": "text"
+        },
+        {
+            "key": "system-message",
+            "name": "Text displayed where choice text hidden",
+            "required": false,
+            "type": "text"
+        }
+    ],
 
-	"project-settings": [
+    "project-settings": [
+        {
+            "key": "project-threshold",
+            "name": "Threshold choice count (number of choices) (override system setting)",
+            "required": false,
+            "type": "text"
+        },
+        {
+            "key": "project-message",
+            "name": "Text displayed where choice text hidden (override system setting)",
+            "required": false,
+            "type": "text"
+        }
     ]
 }
