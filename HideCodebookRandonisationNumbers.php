@@ -42,14 +42,9 @@ class HideCodebookRandonisationNumbers extends AbstractExternalModule
                                                     (function(document, $) {
                                                         $(document).ready(function() {
                                                             // find the target field in the var names column - ensure 
-                                                            // no preceding [ so not just a branching logic match
-                                                            var randVarTd = $('td.vwrap').filter(function() {
-                                                                return $(this).html().match(/^\s*<?php echo $targetField;?>/);
-                                                            });
-                                                            randVarTd
-                                                                .parent('tr')
+                                                            $('#codebook-table tr[data-field=<?=$targetField?>]')
                                                                 .find('table.ReportTableWithBorder')
-                                                                .replaceWith('<div style="margin-top:5px;"><mark><?php echo $message;?></mark></div>'); 
+                                                                .replaceWith('<div style="margin-top:5px;"><mark><?php echo $message;?></mark></div>');
                                                         });
                                                     })(document, jQuery);
                                                 </script>

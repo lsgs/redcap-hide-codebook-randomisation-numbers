@@ -10,4 +10,6 @@ Hides randomisation allocation groups on Codebook page. This can be useful when 
 
 The module is designed to be enabled system-wide, i.e. without needing to be enabled for individual projects.
 
+The option count threshold and message can be configured within each project.
+
 ********************************************************************************
